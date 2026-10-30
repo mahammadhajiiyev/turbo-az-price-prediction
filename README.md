@@ -11,6 +11,8 @@
 [![pandas](https://img.shields.io/badge/pandas-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mahammadhajiiyev/turbo-az-price-prediction/blob/main/Turbo_az_project.ipynb)
 
+### [🚀 Live demo — turbo-qiymet.streamlit.app](https://turbo-qiymet.streamlit.app)
+
 </div>
 
 ---
@@ -29,6 +31,8 @@ The project has two parts:
 ## 🌐 Web app
 
 An interactive **Streamlit** app where anyone can enter a car's details and get an instant price estimate.
+
+👉 **Try it: [turbo-qiymet.streamlit.app](https://turbo-qiymet.streamlit.app)**
 
 - Pick a brand and model — engine size, horsepower, body type, fuel and gearbox are **pre-filled with typical values** for that model
 - Get the estimated price together with a **likely price range** (80% of test predictions fall inside it)

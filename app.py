@@ -48,7 +48,8 @@ st.markdown(f"""
               padding: 26px; border-radius: 18px; text-align: center;
               box-shadow: 0 10px 30px rgba(214, 40, 57, .25); }}
 .price-card .label {{ font-size: .95rem; opacity: .85; letter-spacing: .04em; text-transform: uppercase; }}
-.price-card .price {{ font-size: 2.8rem; font-weight: 800; margin: 6px 0; }}
+.price-card .price {{ font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 800; margin: 6px 0;
+                      white-space: nowrap; }}
 .price-card .range {{ font-size: 1rem; opacity: .9; }}
 .section-title {{ font-weight: 700; font-size: 1.05rem; margin: 6px 0 2px 0; }}
 .footnote {{ color: #6B7280; font-size: .85rem; }}
@@ -56,7 +57,6 @@ st.markdown(f"""
   .hero {{ padding: 20px; }}
   .hero h1 {{ font-size: 1.5rem; }}
   .hero p {{ font-size: .95rem; }}
-  .price-card .price {{ font-size: 2.2rem; }}
 }}
 </style>
 """, unsafe_allow_html=True)
