@@ -7,6 +7,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
 [![LightGBM](https://img.shields.io/badge/LightGBM-02569B)](https://lightgbm.readthedocs.io/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![pandas](https://img.shields.io/badge/pandas-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mahammadhajiiyev/turbo-az-price-prediction/blob/main/Turbo_az_project.ipynb)
 
@@ -18,7 +19,47 @@
 
 [Turbo.az](https://turbo.az) is Azerbaijan's largest online car marketplace. This project builds a regression model that estimates the **market price of a used car** from its listing details — brand, model, year, mileage, engine, transmission, condition and more.
 
-The final **LightGBM** model explains **~92.5% of the price variance (R² = 0.925)** on unseen test data.
+The project has two parts:
+
+| Part | Files | Result |
+|---|---|---|
+| 📓 **Research notebook** | `Turbo_az_project.ipynb` | Data exploration and model comparison · LightGBM **R² = 0.925** |
+| 🌐 **Web app** | `train.py`, `app.py` | Improved production model · **R² = 0.957**, median error **6.8%** · interactive Streamlit app |
+
+## 🌐 Web app
+
+An interactive **Streamlit** app where anyone can enter a car's details and get an instant price estimate.
+
+- Pick a brand and model — engine size, horsepower, body type, fuel and gearbox are **pre-filled with typical values** for that model
+- Get the estimated price together with a **likely price range** (80% of test predictions fall inside it)
+- See how your car compares to the **median listing price by year** for the same model
+- Works on desktop and mobile, UI in Azerbaijani
+
+### Run it locally
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+The trained model is already included in `model/`, so the app works without downloading the dataset.
+
+### Retrain the model
+
+```bash
+pip install kaggle
+python train.py          # downloads the dataset via the Kaggle API and retrains
+```
+
+`train.py` repeats the notebook's cleaning steps and adds a few improvements:
+
+| Improvement | Why |
+|---|---|
+| Uses all ~214K clean listings instead of a 100K sample | More data for rare brands and models |
+| Extracts **horsepower** from the engine field | Strong price signal that the notebook did not use |
+| Trains on **log(price)** | Keeps very expensive cars from dominating the error |
+| Removes obviously invalid listings (year 0, prices below 1,000 AZN) | Cleaner training data |
+| Ordinal-encoded categories instead of one-hot + polynomial features | Smaller and faster model (≈6 MB) |
 
 ## 📊 Dataset
 
@@ -75,7 +116,7 @@ full_pipeline_lgbm.predict(sample_input)
 # → ≈ 16,040
 ```
 
-## 🚀 How to run
+## 🚀 How to run the notebook
 
 1. Click the **Open in Colab** badge above.
 2. Upload your Kaggle API key (`kaggle.json`) when prompted — the dataset downloads automatically.
@@ -92,16 +133,24 @@ jupyter notebook Turbo_az_project.ipynb
 
 ```
 turbo-az-price-prediction/
-├── Turbo_az_project.ipynb   # data cleaning, EDA, modeling, evaluation
+├── Turbo_az_project.ipynb   # research: data cleaning, EDA, model comparison
+├── train.py                 # trains the production model and exports it to model/
+├── app.py                   # Streamlit web app
+├── model/
+│   ├── model.joblib         # trained pipeline (preprocessing + LightGBM)
+│   ├── meta.json            # dropdown options, typical specs per model, metrics
+│   └── price_stats.csv      # median price per brand / model / year (for the chart)
+├── .streamlit/config.toml   # app theme
+├── requirements.txt
 └── README.md
 ```
 
 ## 🔮 Future improvements
 
 - Hyperparameter tuning for LightGBM (`num_leaves`, `min_child_samples`, `learning_rate`)
-- Train on the full 244K cleaned dataset instead of a 100K sample
-- Log-transform the target to reduce the influence of very expensive cars
-- Deploy as a small web app (e.g. Streamlit) where users enter car details and get a price estimate
+- Retrain on fresh listings so prices follow the current market
+- Explain each prediction with SHAP values ("mileage lowered the price by X AZN")
+- Use listing photos as an extra input
 
 ## 👤 Author
 

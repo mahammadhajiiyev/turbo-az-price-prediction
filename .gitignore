@@ -3,4 +3,5 @@ __pycache__/
 *.csv
 kaggle.json
 .venv/
-model/*.joblib
+data/
+!model/price_stats.csv
